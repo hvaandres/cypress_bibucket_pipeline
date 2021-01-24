@@ -1,45 +1,97 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+**Cypress | Bitbucket Pipeline Configuration | --clone**
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+This project is based on Cypress & [docker containers](https://hub.docker.com/r/cypress/base/) where you can choose different [configurations](https://github.com/cypress-io/cypress-docker-images). Also, the master branch is the one that will run the Bitbucket Pipeline.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
-
----
-
-## Edit a file
-
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
-
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+*I recommend you to take a look at this other [project](https://github.com/hvaandres/Cypress_Testing_Reports) if you want to know how to do it with Github Actions*
 
 ---
 
-## Create a file
+## Developer Tools
 
-Next, you’ll add a new file to this repository.
-
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+1. [Bitbucket Pipeline](https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/)
+2. [Cypress.io](https://www.cypress.io/)
+3. [Docker](https://www.docker.com/)
 
 ---
 
-## Clone a repository
+## Start a new project 
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+You will have to make sure that you follow the next steps, if you want to get this project done on your own:
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+1. Create a directory in your local machine
+2. Create a Bitbucket Repository
+3. Clone the repository inside of your Repo
+4. CD inside of your directory
+5. Create a Node.js project
+6. Install cypress
+7. Run cypress
+8. Go back to Bitbucket > Open your repo > Go to Pipelines > Setting up your project with Node.js
+9. Add your node.js commands to run the pipeline
+10. Commit the new file & check the pipeline to see if this set-up is working for you
+11. Go back to your project and open your project in visual studio and pull the new changes
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+```
+mkdir [project_name]
+cd [project_name]
+npm init -y
+npm install cypress --save-dev
+
+npx cypress open or ./node_modules/.bin/cypress open
+
+control + c [stop_running_cypress]
+
+```
+
+## Bitbucket YAML file
+
+```
+#  Template NodeJS build
+
+#  This template allows you to validate your NodeJS code.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: node:10.15.3
+options:
+  max-time: 15
+pipelines:
+  default:
+  - step:
+      name: Pipeline Cypress E2E
+      caches:
+        - npm
+        - cypress
+      image: cypress/base:10
+      script:
+        - npm ci
+        - npx cypress run
+      artifacts:
+        - cypress/reports/**
+        - cypress/videos/**
+
+definitions:
+  caches:
+    npm: $HOME/.npm
+    cypress: $HOME/.cache/Cypress
+
+```
+
+## Cloning your Bitbucket repo to Github
+
+You will have to do the following steps:
+
+```
+git clone --mirror [Bitbucket_Repo_URL]
+# Make a bare mirrored clone of the repository
+
+cd repository-to-mirror.git
+git remote set-url --push origin [Github_Repo_URL]
+# Set the push location to your mirror
+
+git push --mirror
+
+```
+
+## Bitbucket Pipeline Example
+
+![Bitbucket Example](https://github.com/hvaandres/cypress_bibucket_pipeline/blob/Dev/Screen%20Shot%202021-01-23%20at%2011.20.12%20PM.png)
+
