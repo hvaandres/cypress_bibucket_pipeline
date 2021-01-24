@@ -95,3 +95,7 @@ git push --mirror
 
 ![Bitbucket Example](https://github.com/hvaandres/cypress_bibucket_pipeline/blob/Dev/Screen%20Shot%202021-01-23%20at%2011.20.12%20PM.png)
 
+## Real Pipeline Scenario
+
+[Automated Pipeline](https://bitbucket.org/aaharo/automated_pipeline/addon/pipelines/home)
+
